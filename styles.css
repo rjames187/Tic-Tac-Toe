@@ -1,0 +1,16 @@
+body {
+    background-color: #f1f5f9;
+}
+
+main {
+    border-radius: 20px;
+}
+
+#player-container > div {
+    color: #475569;
+    font-size: 2rem;
+}
+
+.not-in-play {
+    color: #94a3b8;
+}
