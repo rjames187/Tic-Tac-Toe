@@ -39,3 +39,16 @@ const gameBoard = (() => {
         getGameBoard
     }
 })();
+
+const playerFactory = (marker) => {
+    const marker = marker;
+    const getMarker = () => marker;
+    const place = (gameBoard, spot) => {
+        gameBoard.placeMarker(marker, spot);
+    };
+
+    return {
+        getMarker,
+        place
+    }
+}
