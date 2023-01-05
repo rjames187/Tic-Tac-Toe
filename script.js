@@ -1,5 +1,5 @@
 const gameBoard = (() => {
-    let gameBoard = ["", "", "", "", "", "", "", "", ""];
+    let gameBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
     const checkRow = (indices) => {
         left = gameBoard[indices[0]];
         right = gameBoard[indices[1]];
@@ -18,7 +18,7 @@ const gameBoard = (() => {
                 return gameBoard[combo[0]];
             }
         }
-        if (!gameBoard.includes("")){
+        if (!gameBoard.includes(" ")){
             return "tie";
         }
     };
@@ -44,14 +44,36 @@ const gameBoard = (() => {
 })();
 
 const playerFactory = (marker) => {
-    const marker = marker;
-    const getMarker = () => marker;
     const place = (gameBoard, spot) => {
         gameBoard.placeMarker(marker, spot);
     };
 
     return {
-        getMarker,
+        marker,
         place
     }
 }
+
+const displayController = (() => {
+    const renderBoard = () => {
+        const domBoard = document.getElementById("game-board");
+        for (i = 0; i < 9; i++) {
+            const tile = document.createElement('div');
+            tile.addEventListener('click', () => {
+                if (gameBoard.getGameBoard()[i] === " ") {
+                    return;
+                }
+                gameFlow.getCurrentPlayer().place(gameBoard, i);
+                gameFlow.tick();
+            });
+            tile.textContent = gameBoard.getGameBoard()[i]
+            domBoard.appendChild(tile);
+        }
+    }
+
+    return {
+        renderBoard
+    }
+})();
+
+displayController.renderBoard()

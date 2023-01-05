@@ -1,16 +1,47 @@
 body {
     background-color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 main {
     border-radius: 20px;
 }
 
+#player-container {
+    display: flex;
+    justify-content: space-around;
+}
+
 #player-container > div {
-    color: #475569;
-    font-size: 2rem;
+    font-size: 4rem;
 }
 
 .not-in-play {
     color: #94a3b8;
+}
+
+#player-container:not(.not-in-play) {
+    color: #475569;
+}
+
+#game-board {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+#game-board > div {
+    font-size: 3rem;
+    background-color: white;
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
