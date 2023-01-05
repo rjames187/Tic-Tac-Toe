@@ -23,12 +23,8 @@ const gameBoard = (() => {
         }
     };
     const placeMarker = (marker, spot) => {
-        if (marker !== "O" && marker !== "X") {
-            return "error";
-        }
-        if (gameBoard[spot] !== "") {
-            return "error";
-        }
+        if (marker !== "O" && marker !== "X") { return "error" }
+        if (gameBoard[spot] !== " ") { return "error" }
         gameBoard[spot] = marker;
         return "okay";
     }
@@ -44,7 +40,7 @@ const gameBoard = (() => {
 })();
 
 const playerFactory = (marker) => {
-    const place = (gameBoard, spot) => {
+    const place = (spot) => {
         gameBoard.placeMarker(marker, spot);
     };
 
@@ -55,15 +51,20 @@ const playerFactory = (marker) => {
 }
 
 const displayController = (() => {
+    const clearBoard = () => {
+        const domBoard = document.getElementById('game-board');
+        domBoard.innerHTML = '';
+    }
     const renderBoard = () => {
+        clearBoard();
         const domBoard = document.getElementById("game-board");
-        for (i = 0; i < 9; i++) {
+        for (let i = 0; i < 9; i++) {
             const tile = document.createElement('div');
             tile.addEventListener('click', () => {
-                if (gameBoard.getGameBoard()[i] === " ") {
+                if (gameBoard.getGameBoard()[i] !== " ") {
                     return;
                 }
-                gameFlow.getCurrentPlayer().place(gameBoard, i);
+                gameFlow.getCurrentPlayer().place(i);
                 gameFlow.tick();
             });
             tile.textContent = gameBoard.getGameBoard()[i]
@@ -72,8 +73,29 @@ const displayController = (() => {
     }
 
     return {
-        renderBoard
+        renderBoard,
+        clearBoard
     }
 })();
 
-displayController.renderBoard()
+const gameFlow = (() => {
+    let currentPlayer = null;
+    const initalizeGame = () => {
+        displayController.renderBoard();
+        currentPlayer = playerFactory('X')
+    }
+    const tick = () => {
+        currentPlayer = currentPlayer.marker === 'X' ? playerFactory('O') : playerFactory('X');
+        displayController.renderBoard();
+        console.log('tick')
+    }
+    const getCurrentPlayer = () => { return currentPlayer }
+    return {
+        getCurrentPlayer,
+        initalizeGame,
+        tick
+    }
+})();
+
+gameFlow.initalizeGame();
+
