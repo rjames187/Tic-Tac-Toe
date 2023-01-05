@@ -1,9 +1,13 @@
 const gameBoard = (() => {
     let gameBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    let gameFrozen = false;
+    const clearMarkers = () => {
+        gameBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    }
     const checkRow = (indices) => {
         left = gameBoard[indices[0]];
         right = gameBoard[indices[1]];
-        middle = gameboard[indices[2]];
+        middle = gameBoard[indices[2]];
         if (left === "O" || left == "X") {
             if (left === middle && left === right) {
                 return true
@@ -21,6 +25,7 @@ const gameBoard = (() => {
         if (!gameBoard.includes(" ")){
             return "tie";
         }
+        return "game is not over"
     };
     const placeMarker = (marker, spot) => {
         if (marker !== "O" && marker !== "X") { return "error" }
@@ -35,7 +40,8 @@ const gameBoard = (() => {
     return {
         checkForWins,
         placeMarker,
-        getGameBoard
+        getGameBoard,
+        clearMarkers
     }
 })();
 
@@ -61,9 +67,8 @@ const displayController = (() => {
         for (let i = 0; i < 9; i++) {
             const tile = document.createElement('div');
             tile.addEventListener('click', () => {
-                if (gameBoard.getGameBoard()[i] !== " ") {
-                    return;
-                }
+                if (gameBoard.getGameBoard()[i] !== " ") { return; }
+                if (gameFlow.gameFrozen) { return; }
                 gameFlow.getCurrentPlayer().place(i);
                 gameFlow.tick();
             });
@@ -80,22 +85,45 @@ const displayController = (() => {
 
 const gameFlow = (() => {
     let currentPlayer = null;
+    const configureModal = () => {
+        const modal = document.getElementById('game-over-message')
+        modal.addEventListener('click', () => {
+            modal.classList.toggle('invisible');
+            initalizeGame();
+        })
+    }
     const initalizeGame = () => {
+        gameBoard.gameFrozen = false;
+        gameBoard.clearMarkers(); 
         displayController.renderBoard();
-        currentPlayer = playerFactory('X')
+        currentPlayer = playerFactory('X');  
     }
     const tick = () => {
         currentPlayer = currentPlayer.marker === 'X' ? playerFactory('O') : playerFactory('X');
         displayController.renderBoard();
         console.log('tick')
+        const gameStatus = gameBoard.checkForWins();
+        if (gameStatus !== "game is not over") { toggleGameOver(gameStatus) }
+    }
+    const toggleGameOver = (gameStatus) => {
+        gameBoard.gameFrozen = true;
+        const modal = document.getElementById('game-over-message');
+        modal.classList.toggle('invisible');
+        if (gameStatus === 'tie') {
+            modal.textContent = "It's a tie!";
+        } else {
+            modal.textContent = `${gameStatus} wins!`;
+        }
     }
     const getCurrentPlayer = () => { return currentPlayer }
     return {
         getCurrentPlayer,
         initalizeGame,
-        tick
+        tick,
+        configureModal
     }
 })();
 
+gameFlow.configureModal();
 gameFlow.initalizeGame();
 
