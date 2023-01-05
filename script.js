@@ -64,6 +64,8 @@ const displayController = (() => {
     }
     const renderBoard = () => {
         clearBoard();
+        document.getElementById('X').classList.toggle('not-in-play');
+        document.getElementById('O').classList.toggle('not-in-play');
         const domBoard = document.getElementById("game-board");
         for (let i = 0; i < 9; i++) {
             const tile = document.createElement('div');
@@ -96,6 +98,8 @@ const gameFlow = (() => {
     const initalizeGame = () => {
         gameBoard.gameFrozen = false;
         gameBoard.clearMarkers(); 
+        document.getElementById('O').classList.remove('not-in-play');
+        document.getElementById('X').classList.add('not-in-play');
         displayController.renderBoard();
         currentPlayer = playerFactory('X');  
     }
