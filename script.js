@@ -41,7 +41,8 @@ const gameBoard = (() => {
         checkForWins,
         placeMarker,
         getGameBoard,
-        clearMarkers
+        clearMarkers,
+        gameFrozen
     }
 })();
 
@@ -68,7 +69,7 @@ const displayController = (() => {
             const tile = document.createElement('div');
             tile.addEventListener('click', () => {
                 if (gameBoard.getGameBoard()[i] !== " ") { return; }
-                if (gameFlow.gameFrozen) { return; }
+                if (gameBoard.gameFrozen) { return; }
                 gameFlow.getCurrentPlayer().place(i);
                 gameFlow.tick();
             });
@@ -110,9 +111,9 @@ const gameFlow = (() => {
         const modal = document.getElementById('game-over-message');
         modal.classList.toggle('invisible');
         if (gameStatus === 'tie') {
-            modal.textContent = "It's a tie!";
+            modal.innerHTML = "It's a tie! <span>Play Again</span>";
         } else {
-            modal.textContent = `${gameStatus} wins!`;
+            modal.innerHTML = `${gameStatus} wins! <span>Play Again</span>`;
         }
     }
     const getCurrentPlayer = () => { return currentPlayer }

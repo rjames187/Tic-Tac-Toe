@@ -49,3 +49,20 @@ main {
 .invisible {
     display: none;
 }
+
+#game-over-message {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background-color: #22c55e;
+    border-radius: 20px;
+    color: #bbf7d0;
+    font-size: 3rem;
+    padding: 20px;
+    cursor: pointer;
+}
+
+span {
+    text-decoration: underline;
+    display: block;
+}
